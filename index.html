@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>睡眠盒子 - 白噪声助眠</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a8a8a8;
+        }
+
+        .master-control {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .master-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .master-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .windows-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .window {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .window-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .preset-scenes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .preset-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .preset-item:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .preset-item.active {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .category-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .noise-list {
+            display: none;
+        }
+
+        .noise-list.active {
+            display: block;
+        }
+
+        .noise-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .noise-item h3 {
+            margin-bottom: 10px;
+            color: #a8a8a8;
+        }
+
+        .noise-controls-inner {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .timer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .timer-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .timer-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timer-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        .timer-btn.active {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timer-display {
+            color: #a8a8a8;
+            font-size: 1.1rem;
+        }
+
+        .play-btn {
+            background: rgba(102, 126, 234, 0.8);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: rgba(102, 126, 234, 1);
+        }
+
+        .volume-slider {
+            width: 200px;
+            height: 5px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .volume-value {
+            color: #a8a8a8;
+            min-width: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .windows-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .volume-control {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .volume-slider {
+                width: 150px;
+            }
+            
+            .timer-controls {
+                flex-direction: column;
+            }
+            
+            .timer-btn {
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🎵 睡眠盒子</h1>
+            <p class="subtitle">让白噪声伴你入眠</p>
+        </header>
+
+        <main class="main-content">
+            <div class="master-control">
+                <button id="masterPlayBtn" class="master-btn">▶️ 开始播放</button>
+            </div>
+
+            <div class="windows-container">
+                <div class="window">
+                    <h2 class="window-title">预设场景</h2>
+                    <div class="preset-scenes">
+                        <div class="preset-item" data-preset="rainy-forest">雨天森林</div>
+                        <div class="preset-item" data-preset="campfire">篝火营地</div>
+                        <div class="preset-item" data-preset="beach-night">海边夜晚</div>
+                        <div class="preset-item" data-preset="zen-temple">古寺禅意</div>
+                        <div class="preset-item" data-preset="peaceful-room">琴茶一室</div>
+                    </div>
+                </div>
+
+                <div class="window">
+                    <h2 class="window-title">自定义场景</h2>
+                    <div class="category-tabs">
+                        <button class="category-tab active" data-category="noise">基础噪声</button>
+                        <button class="category-tab" data-category="nature">自然</button>
+                        <button class="category-tab" data-category="ocean">海边</button>
+                        <button class="category-tab" data-category="zen">禅意</button>
+                    </div>
+
+                    <div class="noise-list active" id="noise">
+                        <div class="noise-item" data-noise="white">
+                            <h3>白噪声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="white">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="white">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="pink">
+                            <h3>粉噪声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="pink">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="pink">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="brown">
+                            <h3>棕噪声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="brown">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="brown">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="noise-list" id="nature">
+                        <div class="noise-item" data-noise="rain">
+                            <h3>雨声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="rain">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="rain">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="forest">
+                            <h3>森林声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="forest">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="forest">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="fire">
+                            <h3>篝火声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="fire">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="fire">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="noise-list" id="ocean">
+                        <div class="noise-item" data-noise="ocean">
+                            <h3>海浪声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="ocean">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="ocean">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="waves">
+                            <h3>海浪声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="waves">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="waves">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="seagulls">
+                            <h3>海鸥声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="seagulls">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="seagulls">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="noise-list" id="zen">
+                        <div class="noise-item" data-noise="chanting">
+                            <h3>诵经声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="chanting">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="chanting">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timer-section">
+                <h3>定时关闭</h3>
+                <div class="timer-controls">
+                    <button class="timer-btn" data-time="15">15分钟</button>
+                    <button class="timer-btn" data-time="30">30分钟</button>
+                    <button class="timer-btn" data-time="60">60分钟</button>
+                    <button class="timer-btn" data-time="120">120分钟</button>
+                    <button class="timer-btn" data-time="0">关闭定时</button>
+                </div>
+                <div id="timerDisplay" class="timer-display">未设置定时</div>
+            </div>
+        </main>
+    </div>
+    <!-- 引入音频引擎 -->
+    <script src="audio-engine.js"></script>
+    <!-- 引入主应用逻辑 -->
+    <script src="app.js"></script>
+    
+    <!-- 初始化应用 -->
+    <script>
+        // 等待DOM加载完成后初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            const sleepBoxApp = new SleepBoxApp();
+            sleepBoxApp.init();
+        });
+    </script>
+</body>
+</html>
