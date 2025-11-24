@@ -277,6 +277,161 @@
                 margin: 0 auto;
             }
         }
+        
+        /* 使用条款按钮样式 */
+        .terms-section {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .terms-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terms-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        /* 使用条款模态框样式 */
+        .terms-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .terms-modal-content {
+            background: rgba(26, 26, 46, 0.95);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .terms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .terms-header h2 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .terms-body {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(90vh - 100px);
+        }
+        
+        .terms-body h3 {
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .terms-body h3:first-child {
+            margin-top: 0;
+        }
+        
+        .terms-body p {
+            color: #a8a8a8;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .terms-body ul {
+            color: #a8a8a8;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .terms-body li {
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .terms-modal {
+                padding: 10px;
+            }
+            
+            .terms-modal-content {
+                max-height: 95vh;
+            }
+            
+            .terms-header {
+                padding: 15px 20px;
+            }
+            
+            .terms-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .terms-body {
+                padding: 20px;
+                max-height: calc(95vh - 80px);
+            }
+            
+            .terms-body h3 {
+                font-size: 1.1rem;
+            }
+            
+            .terms-body p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -441,6 +596,11 @@
                 </div>
                 <div id="timerDisplay" class="timer-display">未设置定时</div>
             </div>
+            
+            <!-- 使用条款按钮 -->
+            <div class="terms-section">
+                <button id="termsBtn" class="terms-btn">📋 使用条款</button>
+            </div>
         </main>
     </div>
     <!-- 引入音频引擎 -->
@@ -454,7 +614,83 @@
         document.addEventListener('DOMContentLoaded', function() {
             const sleepBoxApp = new SleepBoxApp();
             sleepBoxApp.init();
+            
+            // 使用条款功能
+            const termsBtn = document.getElementById('termsBtn');
+            const termsModal = document.getElementById('termsModal');
+            const closeTermsBtn = document.getElementById('closeTermsBtn');
+            
+            // 显示使用条款
+            termsBtn.addEventListener('click', function() {
+                termsModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+            
+            // 关闭使用条款
+            closeTermsBtn.addEventListener('click', function() {
+                termsModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // 恢复背景滚动
+            });
+            
+            // 点击模态框外部关闭
+            termsModal.addEventListener('click', function(event) {
+                if (event.target === termsModal) {
+                    termsModal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // 恢复背景滚动
+                }
+            });
+            
+            // 按ESC键关闭
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && termsModal.style.display === 'flex') {
+                    termsModal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // 恢复背景滚动
+                }
+            });
         });
     </script>
+    
+    <!-- 使用条款模态框 -->
+    <div id="termsModal" class="terms-modal">
+        <div class="terms-modal-content">
+            <div class="terms-header">
+                <h2>Sleep Box 使用条款</h2>
+                <button id="closeTermsBtn" class="close-btn">×</button>
+            </div>
+            <div class="terms-body">
+                <h3>1. 服务说明</h3>
+                <p>1.1 Sleep Box 是一个在线情境音混合器，提供多种环境音效供用户混合使用，主要目的：帮助用户助眠，专注。</p>
+                <p>1.2 我们保留随时修改、暂停或终止服务的权利，恕不另行通知。</p>
+                
+                <h3>2. 用户责任</h3>
+                <p>2.1 用户在使用本服务时应遵守相关法律法规。</p>
+                <p>2.2 用户不得利用本服务从事任何违法或不当行为。</p>
+                <p>2.3 用户应对其账户中的所有活动负责。</p>
+                
+                <h3>3. 知识产权</h3>
+                <p>3.1 本网站的所有内容，包括但不限于音频、图像、代码等，均受著作权法保护。</p>
+                <p>3.2 未经明确书面许可，用户不得复制、修改、传播或用于商业目的。</p>
+                <p>3.3 本站音频素材来源：</p>
+                <ul>
+                    <li>自制或 AI 生成（无版权）</li>
+                </ul>
+                <p>如你使用本站音频制作内容并公开传播，请自行确认素材授权范围。</p>
+                
+                <h3>4. 免责声明</h3>
+                <p>4.1 本服务按现状提供，我们不对服务的准确性、及时性、安全性或可靠性作出任何明示或暗示的保证。</p>
+                <p>4.2 对于因使用本服务而产生的任何直接、间接、附带、特殊或后果性损失，我们不承担责任。</p>
+                
+                <h3>5. 条款变更</h3>
+                <p>5.1 我们保留随时修改本使用条款的权利。</p>
+                <p>5.2 条款修改后，如继续使用本服务，即表示您同意接受修改后的条款。</p>
+                
+                <h3>6. 开源信息</h3>
+                <p>6.1 本项目已在 GitHub 与 Gitee 开源 ，目前处于少量用户测试阶段，暂不放置开源地址。</p>
+                
+                <h3>7. 郑重声明</h3>
+                <p>7.1 本项目不搜集任何用户信息，有任何建议可联系开发者，开发者邮箱sleepbox169@163.com</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
