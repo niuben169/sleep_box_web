@@ -306,13 +306,13 @@
                 <div class="window">
                     <h2 class="window-title">自定义场景</h2>
                     <div class="category-tabs">
-                        <button class="category-tab active" data-category="noise">基础噪声</button>
-                        <button class="category-tab" data-category="nature">自然</button>
+                        <button class="category-tab active" data-category="nature">自然</button>
                         <button class="category-tab" data-category="ocean">海边</button>
                         <button class="category-tab" data-category="zen">禅意</button>
+                        <button class="category-tab" data-category="noise">基础噪声</button>
                     </div>
 
-                    <div class="noise-list active" id="noise">
+                    <div class="noise-list" id="noise">
                         <div class="noise-item" data-noise="white">
                             <h3>白噪声</h3>
                             <div class="noise-controls-inner">
@@ -339,7 +339,7 @@
                         </div>
                     </div>
 
-                    <div class="noise-list" id="nature">
+                    <div class="noise-list active" id="nature">
                         <div class="noise-item" data-noise="rain">
                             <h3>雨声</h3>
                             <div class="noise-controls-inner">
@@ -368,7 +368,7 @@
 
                     <div class="noise-list" id="ocean">
                         <div class="noise-item" data-noise="ocean">
-                            <h3>海浪声</h3>
+                            <h3>海水声</h3>
                             <div class="noise-controls-inner">
                                 <button class="play-btn" data-noise="ocean">播放</button>
                                 <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="ocean">
@@ -395,10 +395,34 @@
 
                     <div class="noise-list" id="zen">
                         <div class="noise-item" data-noise="chanting">
-                            <h3>诵经声</h3>
+                            <h3>颂钵声</h3>
                             <div class="noise-controls-inner">
                                 <button class="play-btn" data-noise="chanting">播放</button>
                                 <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="chanting">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="chanting_sutras">
+                            <h3>诵经声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="chanting_sutras">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="chanting_sutras">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="guzheng">
+                            <h3>古筝声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="guzheng">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="guzheng">
+                                <span class="volume-value">0%</span>
+                            </div>
+                        </div>
+                        <div class="noise-item" data-noise="piano">
+                            <h3>钢琴声</h3>
+                            <div class="noise-controls-inner">
+                                <button class="play-btn" data-noise="piano">播放</button>
+                                <input type="range" class="volume-slider" min="0" max="100" value="0" data-noise="piano">
                                 <span class="volume-value">0%</span>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ class SleepBoxApp {
         this.timerDisplay = document.getElementById('timerDisplay');
         
         // 噪声类型
-        this.noiseTypes = ['white', 'pink', 'brown', 'rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves'];
+        this.noiseTypes = ['white', 'pink', 'brown', 'rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves', 'chanting_sutras', 'guzheng', 'piano'];
         
         // 预设场景定义
         this.presets = {
@@ -24,10 +24,12 @@ class SleepBoxApp {
                 seagulls: 10
             },
             'zen-temple': { // 古寺禅意
-                chanting: 50
+                chanting_sutras: 70,
+                chanting: 30
             },
             'peaceful-room': { // 琴茶一室
-                white: 20
+                guzheng: 60,
+                piano: 40
             }
         };
         

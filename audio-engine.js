@@ -9,9 +9,17 @@ class AudioEngine {
         this.playing = false;
         this.timer = null;
         this.timerEndTime = null;
+        this.playStartTime = null; // 记录播放开始时间
+        this.fadeOutTimer = null; // 淡出定时器
+        
+        // 淡入淡出配置参数
+        this.fadeInDuration = 30; // 淡入时长（秒）
+        this.fadeOutDuration = 60; // 淡出时长（秒）
+        this.fadeInEnabled = true; // 是否启用淡入
+        this.fadeOutEnabled = true; // 是否启用淡出
         
         // 噪声类型定义
-        this.noiseTypes = ['white', 'pink', 'brown', 'rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves'];
+        this.noiseTypes = ['white', 'pink', 'brown', 'rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves', 'chanting_sutras', 'guzheng', 'piano'];
         
         // 初始化音频上下文
         this.initAudioContext();
@@ -45,7 +53,26 @@ class AudioEngine {
         }
         
         this.playing = true;
+        this.playStartTime = Date.now(); // 记录播放开始时间
+        
         console.log('开始播放音频');
+        
+        // 如果启用了淡入功能，重置主音量并开始淡入
+        if (this.fadeInEnabled && this.masterGain) {
+            // 记录当前目标音量（用户设置的音量）
+            const targetVolume = this.masterGain.gain.value;
+            
+            // 获取精确的当前时间
+            const now = this.audioContext.currentTime;
+            
+            // 先将音量设置为0
+            this.masterGain.gain.setValueAtTime(0, now);
+            
+            // 使用线性渐变确保平滑过渡
+            this.masterGain.gain.linearRampToValueAtTime(targetVolume, now + this.fadeInDuration);
+            
+            console.log(`开始淡入效果，持续${this.fadeInDuration}秒`);
+        }
     }
     
     // 停止播放所有噪声
@@ -58,12 +85,19 @@ class AudioEngine {
         }
         
         this.playing = false;
+        this.playStartTime = null;
         
         // 清除定时器
         if (this.timer) {
             clearTimeout(this.timer);
             this.timer = null;
             this.timerEndTime = null;
+        }
+        
+        // 清除淡出定时器
+        if (this.fadeOutTimer) {
+            clearTimeout(this.fadeOutTimer);
+            this.fadeOutTimer = null;
         }
         
         console.log('停止播放音频');
@@ -76,10 +110,28 @@ class AudioEngine {
         // 音量范围0-1
         const normalizedVolume = Math.max(0, Math.min(1, volume / 100));
         
+        // 检查是否在淡入期间
+        let rampDuration = 0.1; // 默认短时间过渡
+        if (this.fadeInEnabled && this.playStartTime) {
+            const playTimeElapsed = (Date.now() - this.playStartTime) / 1000; // 已播放时间（秒）
+            if (playTimeElapsed < this.fadeInDuration) {
+                // 仍然在淡入期间，调整剩余的淡入时间
+                rampDuration = this.fadeInDuration - playTimeElapsed;
+                // 计算当前应该达到的音量比例
+                const currentFadeProgress = playTimeElapsed / this.fadeInDuration;
+                
+                // 先设置到当前进度应该达到的音量
+                this.masterGain.gain.setValueAtTime(
+                    normalizedVolume * currentFadeProgress, 
+                    this.audioContext.currentTime
+                );
+            }
+        }
+        
         // 使用线性Ramp来平滑音量变化
         this.masterGain.gain.linearRampToValueAtTime(
             normalizedVolume, 
-            this.audioContext.currentTime + 0.1
+            this.audioContext.currentTime + rampDuration
         );
         
         console.log('主音量设置为:', normalizedVolume);
@@ -93,7 +145,7 @@ class AudioEngine {
         this.stopNoise(noiseType);
         
         // 检查是否是环境音效类型
-        const isAmbientSound = ['rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves'].includes(noiseType);
+        const isAmbientSound = ['rain', 'ocean', 'forest', 'chanting', 'fire', 'seagulls', 'waves', 'chanting_sutras', 'guzheng', 'piano'].includes(noiseType);
         
         if (isAmbientSound) {
             // 对于环境音效，先创建增益节点，但不立即播放
@@ -185,6 +237,9 @@ class AudioEngine {
             case 'fire':
             case 'seagulls':
             case 'waves':
+            case 'chanting_sutras':
+            case 'guzheng':
+            case 'piano':
                 // 对于环境音效，直接加载音频文件，不设置默认buffer
                 this.loadAudioFile(noiseType, source);
                 break;
@@ -222,7 +277,7 @@ class AudioEngine {
         // 使用Voss-McCartney算法生成粉噪声
         for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
             const data = buffer.getChannelData(channel);
-            const b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+            let b0 = 0.0, b1 = 0.0, b2 = 0.0, b3 = 0.0, b4 = 0.0, b5 = 0.0, b6 = 0.0;
             
             for (let i = 0; i < bufferSize; i++) {
                 const white = Math.random() * 2 - 1;
@@ -361,9 +416,9 @@ class AudioEngine {
         // 显示错误提示
         const noiseNames = {
             'rain': '雨声',
-            'ocean': '海浪声',
+            'ocean': '海水声',
             'forest': '森林声',
-            'chanting': '诵经声',
+            'chanting': '颂钵声',
             'fire': '篝火声',
             'seagulls': '海鸥声',
             'waves': '海浪声'
@@ -442,7 +497,36 @@ class AudioEngine {
         const milliseconds = minutes * 60 * 1000;
         this.timerEndTime = Date.now() + milliseconds;
         
+        // 如果启用了淡出功能，并且定时器设置的时间足够长（至少大于淡出时长）
+        if (this.fadeOutEnabled && this.masterGain && milliseconds > this.fadeOutDuration * 1000) {
+            // 计算淡出开始时间（总时间减去淡出时长）
+            const fadeOutDelay = milliseconds - (this.fadeOutDuration * 1000);
+            
+            // 设置淡出定时器
+            this.fadeOutTimer = setTimeout(() => {
+                if (this.playing && this.masterGain) {
+                    // 获取精确的当前时间
+                    const now = this.audioContext.currentTime;
+                    
+                    // 记录当前音量
+                    const currentVolume = this.masterGain.gain.value;
+                    
+                    // 开始淡出效果，使用平滑的线性过渡
+                    this.masterGain.gain.setValueAtTime(currentVolume, now);
+                    this.masterGain.gain.linearRampToValueAtTime(0, now + this.fadeOutDuration);
+                    
+                    console.log(`开始淡出效果，持续${this.fadeOutDuration}秒`);
+                }
+            }, fadeOutDelay);
+        }
+        
         this.timer = setTimeout(() => {
+            // 清除淡出定时器（如果还在运行）
+            if (this.fadeOutTimer) {
+                clearTimeout(this.fadeOutTimer);
+                this.fadeOutTimer = null;
+            }
+            
             this.stop();
             console.log('定时器到期，停止播放');
         }, milliseconds);
@@ -456,6 +540,54 @@ class AudioEngine {
         if (!this.timerEndTime) return null;
         const remaining = this.timerEndTime - Date.now();
         return remaining > 0 ? remaining : null;
+    }
+    
+    // 设置淡入时长（秒）
+    setFadeInDuration(seconds) {
+        // 验证输入参数，确保为正数
+        if (typeof seconds === 'number' && seconds > 0) {
+            this.fadeInDuration = seconds;
+            console.log(`淡入时长已设置为${seconds}秒`);
+            return true;
+        }
+        console.warn('无效的淡入时长参数，必须为正数');
+        return false;
+    }
+    
+    // 设置淡出时长（秒）
+    setFadeOutDuration(seconds) {
+        // 验证输入参数，确保为正数
+        if (typeof seconds === 'number' && seconds > 0) {
+            this.fadeOutDuration = seconds;
+            console.log(`淡出时长已设置为${seconds}秒`);
+            return true;
+        }
+        console.warn('无效的淡出时长参数，必须为正数');
+        return false;
+    }
+    
+    // 启用或禁用淡入效果
+    enableFadeIn(enable) {
+        this.fadeInEnabled = !!enable;
+        console.log(`淡入效果已${this.fadeInEnabled ? '启用' : '禁用'}`);
+        return true;
+    }
+    
+    // 启用或禁用淡出效果
+    enableFadeOut(enable) {
+        this.fadeOutEnabled = !!enable;
+        console.log(`淡出效果已${this.fadeOutEnabled ? '启用' : '禁用'}`);
+        return true;
+    }
+    
+    // 获取当前淡入淡出配置
+    getFadeSettings() {
+        return {
+            fadeInDuration: this.fadeInDuration,
+            fadeOutDuration: this.fadeOutDuration,
+            fadeInEnabled: this.fadeInEnabled,
+            fadeOutEnabled: this.fadeOutEnabled
+        };
     }
     
     // 保存设置到localStorage
