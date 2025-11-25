@@ -597,8 +597,9 @@
                 <div id="timerDisplay" class="timer-display">未设置定时</div>
             </div>
             
-            <!-- 使用条款按钮 -->
+            <!-- 使用条款和关于我们按钮 -->
             <div class="terms-section">
+                <button id="aboutBtn" class="terms-btn">👥 关于我们</button>
                 <button id="termsBtn" class="terms-btn">📋 使用条款</button>
             </div>
         </main>
@@ -647,8 +648,84 @@
                     document.body.style.overflow = 'auto'; // 恢复背景滚动
                 }
             });
+            
+            // 关于我们功能
+            const aboutBtn = document.getElementById('aboutBtn');
+            const aboutModal = document.getElementById('aboutModal');
+            const closeAboutBtn = document.getElementById('closeAboutBtn');
+            
+            // 显示关于我们
+            aboutBtn.addEventListener('click', function() {
+                aboutModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+            
+            // 关闭关于我们
+            closeAboutBtn.addEventListener('click', function() {
+                aboutModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // 恢复背景滚动
+            });
+            
+            // 点击模态框外部关闭
+            aboutModal.addEventListener('click', function(event) {
+                if (event.target === aboutModal) {
+                    aboutModal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // 恢复背景滚动
+                }
+            });
+            
+            // 按ESC键关闭
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && aboutModal.style.display === 'flex') {
+                    aboutModal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // 恢复背景滚动
+                }
+            });
         });
     </script>
+    
+    <!-- 关于我们模态框 -->
+    <div id="aboutModal" class="terms-modal">
+        <div class="terms-modal-content">
+            <div class="terms-header">
+                <h2>关于我们 ✨</h2>
+                <button id="closeAboutBtn" class="close-btn">×</button>
+            </div>
+            <div class="terms-body about-content">
+                <div class="about-image-container">
+                    <img src="box.png" alt="Sleep Box Logo" class="about-image">
+                </div>
+                <style>
+                .about-image-container {
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                
+                .about-image {
+                    max-width: 200px;
+                    height: auto;
+                    border-radius: 8px;
+                }
+                </style>
+                <p>Sleepbox 的诞生，源于一场黑客松前夜的「失眠」——😴</p>
+                <p>当脑子还在跑代码、PPT 和 Deadline 时，我们只想让所有人「一键安静、一秒入睡」💤。</p>
+                <p>48 小时后，带着粗糙的 Demo 站上黑客松舞台，没想到收获第一批「试睡员」的掌声与吐槽 👏🎤。</p>
+                <p>路演结束，比赛散场，但键盘声没停：经过不断优化，用业余时间把原型打磨成你现在看到的模样。</p>
+                <p>现在，Sleepbox 网页版正式上线 🎉：</p>
+                <ul>
+                    <li>无账号、无追踪、无广告，打开即可享受清新安静的睡前时光 🌙；</li>
+                    <li>配置属于你的专属白噪音，科学助眠 🎧；</li>
+                    <li>不搜集任何用户数据，隐私无忧 🔒。</li>
+                </ul>
+                <p>从黑客松的临时仓库到正式域名 sleepbox.fun，我们迭代了 12 个版本，只为把「好好睡一觉」这件小事做到极致 🌟。</p>
+                <p>如果你也曾在深夜数过羊，欢迎来试试我们的「睡眠盒子」——</p>
+                <p>把喧嚣关在窗外，把美梦留给自己 !</p>
+                <p>有任何建议，微信群里 @我 就行 😉</p>
+                <p>📮 邮箱地址：<a href="mailto:sleepbox169@163.com">sleepbox169@163.com</a></p>
+                <p class="about-signature">sleepbox工作室</p>
+            </div>
+        </div>
+    </div>
     
     <!-- 使用条款模态框 -->
     <div id="termsModal" class="terms-modal">
