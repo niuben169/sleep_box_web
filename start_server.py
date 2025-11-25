@@ -6,7 +6,7 @@ import threading
 import time
 
 # 设置服务器端口
-PORT = 8081
+PORT = 8082
 
 # 获取当前目录
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))

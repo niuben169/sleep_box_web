@@ -30,6 +30,10 @@ class SleepBoxApp {
             'peaceful-room': { // 琴茶一室
                 guzheng: 60,
                 piano: 40
+            },
+            'rainy-campfire': { // 雨夜篝火
+                rain: 50,
+                fire: 45
             }
         };
         
@@ -199,6 +203,42 @@ class SleepBoxApp {
         
         // 记录当前激活的预设
         this.state.activePreset = presetId;
+        
+        // 根据预设切换到对应的音效类别
+        let targetCategory = 'nature'; // 默认类别
+        switch (presetId) {
+            case 'rainy-forest':
+            case 'campfire':
+                targetCategory = 'nature';
+                break;
+            case 'beach-night':
+                targetCategory = 'ocean';
+                break;
+            case 'zen-temple':
+            case 'peaceful-room':
+                targetCategory = 'zen';
+                break;
+        }
+        
+        // 切换到对应类别
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const noiseLists = document.querySelectorAll('.noise-list');
+        
+        categoryTabs.forEach(tab => {
+            if (tab.dataset.category === targetCategory) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        noiseLists.forEach(list => {
+            if (list.id === targetCategory) {
+                list.classList.add('active');
+            } else {
+                list.classList.remove('active');
+            }
+        });
         
         // 应用预设设置
         const preset = this.presets[presetId];
