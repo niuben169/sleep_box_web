@@ -80,6 +80,13 @@ class SleepBoxApp {
                 
                 // 音量滑块事件
                 volumeSlider.addEventListener('input', () => {
+                    // 取消预设场景选择
+                    if (this.state.activePreset) {
+                        this.state.activePreset = null;
+                        const presetItems = document.querySelectorAll('.preset-item');
+                        presetItems.forEach(item => item.classList.remove('active'));
+                    }
+                    
                     this.updateNoiseVolume(noiseType);
                     // 更新显示的音量值
                     volumeValue.textContent = `${volumeSlider.value}%`;
@@ -157,6 +164,11 @@ class SleepBoxApp {
         this.state.playing = true;
         this.updateMasterButton();
         
+        // 检查是否有活动噪声
+        const hasActiveNoises = Object.entries(this.state.activeNoises).some(
+            ([noiseType, volume]) => volume > 0
+        );
+        
         // 恢复之前激活的噪声
         for (const [noiseType, volume] of Object.entries(this.state.activeNoises)) {
             if (volume > 0) { // 只播放音量大于0的噪声
@@ -164,6 +176,7 @@ class SleepBoxApp {
                 this.setNoiseVolume(noiseType, volume);
             }
         }
+        
     }
     
     // 停止播放（总开关）- 保持滑块位置但停止播放
@@ -503,6 +516,62 @@ class SleepBoxApp {
         this.state.activeNoises = {};
         
         console.log('设置已重置，所有滑块位置为0');
+        
+        // 网页加载时自动选择雨天森林预设场景UI，但不自动播放
+        setTimeout(() => {
+            const presetId = 'rainy-forest';
+            
+            // 更新预设UI状态
+            const presetItems = document.querySelectorAll('.preset-item');
+            presetItems.forEach(item => {
+                if (item.dataset.preset === presetId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 切换到对应的音效类别（自然类别）
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const noiseLists = document.querySelectorAll('.noise-list');
+            
+            categoryTabs.forEach(tab => {
+                if (tab.dataset.category === 'nature') {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            noiseLists.forEach(list => {
+                if (list.id === 'nature') {
+                    list.classList.add('active');
+                } else {
+                    list.classList.remove('active');
+                }
+            });
+            
+            // 保存预设配置到activeNoises状态中，但不实际播放
+            const preset = this.presets[presetId];
+            if (preset) {
+                // 记录当前激活的预设
+                this.state.activePreset = presetId;
+                
+                // 为预设中的噪声设置音量值并更新UI滑块，但不播放
+                for (const [noiseType, volume] of Object.entries(preset)) {
+                    // 更新滑块值和显示
+                    const volumeSlider = document.querySelector(`.volume-slider[data-noise="${noiseType}"]`);
+                    const volumeValue = document.querySelector(`.noise-item[data-noise="${noiseType}"] .volume-value`);
+                    const playBtn = document.querySelector(`.play-btn[data-noise="${noiseType}"]`);
+                    
+                    if (volumeSlider && volumeValue && playBtn) {
+                        volumeSlider.value = volume;
+                        volumeValue.textContent = `${volume}%`;
+                        
+                        // 将音量设置保存到状态中，但不实际播放
+                        this.state.activeNoises[noiseType] = volume;
+                    }
+                }
+            }
+        }, 100);
     }
 }
 

@@ -209,6 +209,42 @@
             color: #a8a8a8;
             font-size: 1.1rem;
         }
+        
+        /* 品牌图片样式 */
+        .brand-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            padding: 10px;
+        }
+        
+        .brand-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 响应式图片调整 */
+        @media (max-width: 768px) {
+            .brand-image-container {
+                margin: 15px 0;
+                padding: 5px;
+            }
+            
+            .brand-image {
+                max-height: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .brand-image {
+                max-height: 120px;
+            }
+        }
 
         .play-btn {
             background: rgba(102, 126, 234, 0.8);
@@ -598,6 +634,8 @@
                 <div id="timerDisplay" class="timer-display">未设置定时</div>
             </div>
             
+
+            
             <!-- 使用条款和关于我们按钮 -->
             <div class="terms-section">
                 <button id="aboutBtn" class="terms-btn">👥 关于我们</button>
@@ -693,13 +731,26 @@
                 <button id="closeAboutBtn" class="close-btn">×</button>
             </div>
             <div class="terms-body about-content">
-                <div class="about-image-container">
-                    <img src="box.png" alt="Sleep Box Logo" class="about-image">
+                <div class="about-images-container">
+                    <div class="about-image-wrapper">
+                        <img src="box.png" alt="Sleep Box Logo" class="about-image">
+                    </div>
+                    <div class="about-image-wrapper">
+                        <img src="sleepbox_ma.png" alt="Sleep Box" class="about-image">
+                    </div>
                 </div>
                 <style>
-                .about-image-container {
+                .about-images-container {
                     margin: 20px 0;
-                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 20px;
+                }
+                
+                .about-image-wrapper {
+                    display: flex;
+                    justify-content: center;
                 }
                 
                 .about-image {
@@ -709,19 +760,19 @@
                 }
                 </style>
                 <p>Sleepbox 的诞生，源于一场黑客松前夜的「失眠」——😴</p>
-                <p>当脑子还在跑代码、PPT 和 Deadline 时，我们只想让所有人「一键安静、一秒入睡」💤。</p>
+                <p>当脑子还在跑代码、PPT 和 Deadline 时，我只想让所有人「一键安静、一秒入睡」💤。</p>
                 <p>48 小时后，带着粗糙的 Demo 站上黑客松舞台，没想到收获第一批「试睡员」的掌声与吐槽 👏🎤。</p>
-                <p>路演结束，比赛散场，但键盘声没停：经过不断优化，用业余时间把原型打磨成你现在看到的模样。</p>
+                <p>路演结束，比赛散场，但键盘声没停：经过不断优化，我用业余时间把原型打磨成你现在看到的模样。</p>
                 <p>现在，Sleepbox 网页版正式上线 🎉：</p>
                 <ul>
                     <li>无账号、无追踪、无广告，打开即可享受清新安静的睡前时光 🌙；</li>
                     <li>配置属于你的专属白噪音，科学助眠 🎧；</li>
                     <li>不搜集任何用户数据，隐私无忧 🔒。</li>
                 </ul>
-                <p>从黑客松的临时仓库到正式域名 sleepbox.fun，我们迭代了 12 个版本，只为把「好好睡一觉」这件小事做到极致 🌟。</p>
-                <p>如果你也曾在深夜数过羊，欢迎来试试我们的「睡眠盒子」——</p>
+                <p>从黑客松的临时仓库到正式域名 sleepbox.fun，我们迭代了数十个版本，只为把「好好睡一觉」这件小事做到极致 🌟。</p>
+                <p>如果你也曾在深夜数过羊，欢迎来试试这一款「睡眠盒子」——</p>
                 <p>把喧嚣关在窗外，把美梦留给自己 !</p>
-                <p>有任何建议，微信群里 @我 就行 😉</p>
+                <p>有任何建议，微信 @我 就行 😉</p>
                 <p>📮 邮箱地址：<a href="mailto:sleepbox169@163.com">sleepbox169@163.com</a></p>
                 <p class="about-signature">sleepbox工作室</p>
             </div>
@@ -763,7 +814,10 @@
                 <p>5.2 条款修改后，如继续使用本服务，即表示您同意接受修改后的条款。</p>
                 
                 <h3>6. 开源信息</h3>
-                <p>6.1 本项目已在 GitHub 与 Gitee 开源 ，目前处于少量用户测试阶段，暂不放置开源地址。</p>
+                <p>6.1 本项目已在 GitHub 与 Gitee 开源 ，开源地址如下：</p>
+                <P>https://github.com/niuben169/sleep_box_web</P>
+                <P>https://gitee.com/niubenpy/sleep_box_web_github</P>
+                <p>6.2 本项目基于 MIT 协议开源，您可以在遵守协议的前提下自由使用、修改和分发本项目的代码。</p>
                 
                 <h3>7. 郑重声明</h3>
                 <p>7.1 本项目不搜集任何用户信息，有任何建议可联系开发者，开发者邮箱sleepbox169@163.com</p>

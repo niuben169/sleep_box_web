@@ -41,8 +41,8 @@
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/yourusername/sleep-box.git
-   cd sleep-box
+   git clone https://github.com/niuben169/sleep_box_web
+   cd sleep_box_web
    ```
 
 2. **启动服务器**
@@ -57,7 +57,7 @@
 
 ### 在线访问
 
-直接访问：[sleepbox.fun](https://sleepbox.fun)
+直接访问：[sleepbox.fun](https://www.sleepbox.fun)
 
 ## 📦 项目结构
 
@@ -124,7 +124,14 @@ sleep-box/
 
 ## 📝 更新日志
 
+### 025-11-29 V3.5
+
+- 关于我们页面增加网页链接二维码
+- 首次点击页面预设场景默认选择雨天森林
+- 点击自定义场景按钮时 预设场景 取消选择
+
 ### 2025-11-25 V3.4
+
 - 增加关于我们页面
 
 ### 2025-11-24 V3.3
@@ -153,7 +160,7 @@ sleep-box/
 ## 📧 联系方式
 
 - 邮箱：sleepbox169@163.com
-- 网站：[sleepbox.fun](https://sleepbox.fun)
+- 网站：[sleepbox.fun](https://www.sleepbox.fun)
 
 ## 🙏 致谢
 

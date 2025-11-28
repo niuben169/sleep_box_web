@@ -13,7 +13,7 @@ class AudioEngine {
         this.fadeOutTimer = null; // 淡出定时器
         
         // 淡入淡出配置参数
-        this.fadeInDuration = 30; // 淡入时长（秒）
+        this.fadeInDuration = 10; // 淡入时长（秒）
         this.fadeOutDuration = 60; // 淡出时长（秒）
         this.fadeInEnabled = true; // 是否启用淡入
         this.fadeOutEnabled = true; // 是否启用淡出
@@ -429,7 +429,8 @@ class AudioEngine {
         // 创建提示元素
         const notification = document.createElement('div');
         notification.className = 'audio-error-notification';
-        notification.textContent = `无法加载${noiseName}音频文件，请检查sounds文件夹中是否存在${noiseType}.mp3文件`;
+        //notification.textContent = `无法加载${noiseName}音频文件，请检查sounds文件夹中是否存在${noiseType}.mp3文件`;
+        notification.textContent = `网络问题，${noiseName}音频加载失败！重新打开该应用即可解决！`;
         notification.style.cssText = `
             position: fixed;
             top: 20px;
