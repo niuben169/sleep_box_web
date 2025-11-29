@@ -37,6 +37,13 @@ class SleepBoxApp {
             }
         };
         
+        // 设置停止事件回调，同步更新app.js播放状态
+        audioEngine.setOnStopCallback(() => {
+            console.log('收到音频引擎停止通知，更新app.js播放状态');
+            this.state.playing = false;
+            this.updateMasterButton();
+        });
+        
         // 应用状态
         this.state = {
             playing: false,
@@ -298,12 +305,27 @@ class SleepBoxApp {
     
     // 更新主播放按钮状态
     updateMasterButton() {
-        if (this.state.playing) {
-            this.masterPlayBtn.textContent = '⏸️ 暂停播放';
+        const { playing } = this.state;
+        const musicAnimation = document.getElementById('musicAnimation');
+        
+        // 确保动效元素存在
+        if (!musicAnimation) {
+            console.error('动效元素不存在');
+            return;
+        }
+        
+        if (playing) {
+            this.masterPlayBtn.textContent = '⏸️ 暂停';
             this.masterPlayBtn.classList.add('active');
+            
+            // 显示动效
+            musicAnimation.classList.add('active');
         } else {
             this.masterPlayBtn.textContent = '▶️ 开始播放';
             this.masterPlayBtn.classList.remove('active');
+            
+            // 隐藏动效
+            musicAnimation.classList.remove('active');
         }
     }
     

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画效果测试</title>
+    <link rel="stylesheet" href="animation_test.css">
+</head>
+<body>
+    <div class="container">
+        <h1>音乐动效测试</h1>
+        
+        <div class="control-container">
+            <!-- 动效元素放在按钮上方 -->
+            <div id="musicAnimation" class="music-animation">
+                <div class="animation-circle animation-circle-1"></div>
+                <div class="animation-circle animation-circle-2"></div>
+                <div class="animation-circle animation-circle-3"></div>
+            </div>
+            
+            <!-- 播放按钮 -->
+            <button id="playButton" class="play-button">▶️ 开始播放</button>
+        </div>
+    </div>
+
+    <script>
+        // 简单的JS交互逻辑
+        const playButton = document.getElementById('playButton');
+        const musicAnimation = document.getElementById('musicAnimation');
+        let isPlaying = false;
+
+        playButton.addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                playButton.textContent = '⏸️ 暂停播放';
+                playButton.classList.add('active');
+                musicAnimation.classList.add('active'); // 显示动效
+            } else {
+                playButton.textContent = '▶️ 开始播放';
+                playButton.classList.remove('active');
+                musicAnimation.classList.remove('active'); // 隐藏动效
+            }
+        });
+    </script>
+</body>
+</html>

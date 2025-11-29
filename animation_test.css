@@ -1,0 +1,138 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+h1 {
+    margin-bottom: 40px;
+    font-size: 2rem;
+    color: white;
+}
+
+/* 控制容器 - 确保动效和按钮正确排列 */
+.control-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+/* 音乐动效容器 - 显示在按钮上方 */
+.music-animation {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    display: none; /* 默认隐藏 */
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+/* 动效激活状态 */
+.music-animation.active {
+    display: flex; /* 激活时显示 */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 动画圆圈基础样式 */
+.animation-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(106, 17, 203, 0.4);
+    animation: pulse-animation 2s infinite ease-out;
+}
+
+/* 第一个圆圈 */
+.animation-circle-1 {
+    width: 100px;
+    height: 100px;
+    background: rgba(106, 17, 203, 0.4);
+}
+
+/* 第二个圆圈 */
+.animation-circle-2 {
+    width: 70px;
+    height: 70px;
+    background: rgba(37, 117, 252, 0.4);
+    animation-delay: 0.3s;
+}
+
+/* 第三个圆圈 */
+.animation-circle-3 {
+    width: 40px;
+    height: 40px;
+    background: rgba(231, 76, 60, 0.4);
+    animation-delay: 0.6s;
+}
+
+/* 脉动动画关键帧 - 简单明显的效果 */
+@keyframes pulse-animation {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 播放按钮样式 */
+.play-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.play-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
+}
+
+.play-button.active {
+    background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+}

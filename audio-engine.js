@@ -100,7 +100,17 @@ class AudioEngine {
             this.fadeOutTimer = null;
         }
         
+        // 触发停止事件，通知app.js更新状态
+        if (this.onStopCallback) {
+            this.onStopCallback();
+        }
+        
         console.log('停止播放音频');
+    }
+    
+    // 设置停止事件回调
+    setOnStopCallback(callback) {
+        this.onStopCallback = callback;
     }
     
     // 设置主音量

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>睡眠盒子 - 白噪声助眠</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="animation_test.css">
     <style>
         * {
             margin: 0;
@@ -479,6 +480,11 @@
 
         <main class="main-content">
             <div class="master-control">
+                <div id="musicAnimation" class="music-animation">
+                    <div class="animation-circle animation-circle-1"></div>
+                    <div class="animation-circle animation-circle-2"></div>
+                    <div class="animation-circle animation-circle-3"></div>
+                </div>
                 <button id="masterPlayBtn" class="master-btn">▶️ 开始播放</button>
             </div>
 
@@ -627,8 +633,8 @@
                 <div class="timer-controls">
                     <button class="timer-btn" data-time="15">15分钟</button>
                     <button class="timer-btn" data-time="30">30分钟</button>
-                    <button class="timer-btn" data-time="60">60分钟</button>
-                    <button class="timer-btn" data-time="120">120分钟</button>
+                    <button class="timer-btn" data-time="60">1小时</button>
+                    <button class="timer-btn" data-time="120">2小时</button>
                     <button class="timer-btn" data-time="0">关闭定时</button>
                 </div>
                 <div id="timerDisplay" class="timer-display">未设置定时</div>
